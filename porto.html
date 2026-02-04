@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joseph - Portfolio Investasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --blue-accent: #3b82f6;
+            --blue-light: #60a5fa;
+            --cyan: #22d3ee;
+            --white: #f1f5f9;
+            --gray: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #020617 0%, #0a1628 50%, #020617 100%);
+            z-index: 0;
+        }
+
+        .mesh-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: orbFloat 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #0891b2, #22d3ee);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--blue-accent), var(--cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 28px;
+            font-size: 48px;
+            font-weight: 700;
+            box-shadow: 
+                0 0 60px rgba(59, 130, 246, 0.4),
+                0 0 100px rgba(34, 211, 238, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .name {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--blue-light) 50%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 20px;
+            color: var(--gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Stats */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @media (max-width: 768px) {
+            .stats-overview { grid-template-columns: 1fr; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card {
+            padding: 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue-accent), transparent);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blue-light), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Portfolio Section */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 36px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 32px;
+            background: linear-gradient(180deg, var(--blue-accent), var(--cyan));
+            border-radius: 3px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        @media (max-width: 900px) {
+            .portfolio-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Chart */
+        .chart-container {
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Asset List */
+        .asset-list {
+            padding: 28px;
+        }
+
+        .asset-item {
+            display: flex;
+            align-items: center;
+            padding: 24px;
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .asset-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(59, 130, 246, 0.2);
+            transform: translateX(8px);
+        }
+
+        .asset-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .asset-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .asset-icon.crypto { 
+            background: linear-gradient(135deg, #f7931a, #ffc107);
+            font-size: 28px;
+        }
+        .asset-icon.gold { 
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            font-size: 28px;
+        }
+        .asset-icon.stock { 
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            font-size: 14px;
+            color: white;
+        }
+
+        .asset-info { flex: 1; }
+
+        .asset-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .asset-allocation {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .asset-value { text-align: right; }
+
+        .asset-amount {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .asset-percentage {
+            font-size: 14px;
+            color: var(--cyan);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 70px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .philosophy {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 28px 36px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .philosophy::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 80px;
+            color: rgba(59, 130, 246, 0.15);
+            font-family: Georgia, serif;
+        }
+
+        .philosophy-quote {
+            font-size: 18px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .philosophy-author {
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--blue-light);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 14px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+    <div class="mesh-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="avatar">J</div>
+            <h1 class="name">Joseph</h1>
+            <p class="tagline">Mahasiswa dan Investor</p>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-overview">
+            <div class="glass-card stat-card">
+                <div class="stat-label">Total Portfolio</div>
+                <div class="stat-value">Rp 105 Jt</div>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-label">Jumlah Aset</div>
+                <div class="stat-value">3 Aset</div>
+            </div>
+            <div class="glass-card stat-card">
+                <div class="stat-label">Strategi</div>
+                <div class="stat-value">Value</div>
+            </div>
+        </div>
+
+        <!-- Portfolio -->
+        <section>
+            <h2 class="section-title">Alokasi Portfolio</h2>
+            <div class="portfolio-grid">
+                <!-- Chart -->
+                <div class="glass-card chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Asset List -->
+                <div class="glass-card asset-list">
+                    <div class="asset-item">
+                        <div class="asset-icon crypto">₿</div>
+                        <div class="asset-info">
+                            <div class="asset-name">Cryptocurrency</div>
+                            <div class="asset-allocation">Bitcoin & Altcoins</div>
+                        </div>
+                        <div class="asset-value">
+                            <div class="asset-amount">Rp 55 Juta</div>
+                            <div class="asset-percentage">52.4%</div>
+                        </div>
+                    </div>
+
+                    <div class="asset-item">
+                        <div class="asset-icon gold">🪙</div>
+                        <div class="asset-info">
+                            <div class="asset-name">Emas</div>
+                            <div class="asset-allocation">Physical Gold</div>
+                        </div>
+                        <div class="asset-value">
+                            <div class="asset-amount">Rp 25 Juta</div>
+                            <div class="asset-percentage">23.8%</div>
+                        </div>
+                    </div>
+
+                    <div class="asset-item">
+                        <div class="asset-icon stock">BCA</div>
+                        <div class="asset-info">
+                            <div class="asset-name">Saham BBCA</div>
+                            <div class="asset-allocation">Bank Central Asia</div>
+                        </div>
+                        <div class="asset-value">
+                            <div class="asset-amount">Rp 25 Juta</div>
+                            <div class="asset-percentage">23.8%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="philosophy">
+                <p class="philosophy-quote">Price is what you pay, value is what you get.</p>
+                <p class="philosophy-author">— Warren Buffett</p>
+            </div>
+            <p class="copyright">© 2026 Joseph. Dibuat dengan 💙</p>
+        </footer>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('portfolioChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Crypto', 'Emas', 'BBCA'],
+                datasets: [{
+                    data: [55, 25, 25],
+                    backgroundColor: [
+                        '#f7931a',
+                        '#ffd700',
+                        '#3b82f6'
+                    ],
+                    borderColor: '#0a1628',
+                    borderWidth: 4,
+                    hoverBorderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#94a3b8',
+                            padding: 20,
+                            font: {
+                                family: 'Outfit',
+                                size: 14,
+                                weight: '500'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#f1f5f9',
+                        padding: 16,
+                        cornerRadius: 12,
+                        titleFont: {
+                            family: 'Outfit',
+                            size: 14,
+                            weight: '600'
+                        },
+                        bodyFont: {
+                            family: 'Outfit',
+                            size: 14
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return ' Rp ' + context.raw + ' Juta (' + ((context.raw/105)*100).toFixed(1) + '%)';
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
